@@ -1,3 +1,6 @@
+import {
+	getvkey
+} from 'api/singer'
 export default class Song {
 	constructor({
 		id,
@@ -29,9 +32,10 @@ export function createSong(musicData) {
 		album: musicData.albumname,
 		duration: musicData.interval,
 		image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
-		url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
+		url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}.m4a?guid=9039554880&${getvkey().key}&uin=0&fromtag=38`
 	})
 }
+
 //用这个方法设置歌手名称
 function filterSinger(singer) {
 	let ret = []

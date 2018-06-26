@@ -36,3 +36,26 @@ export function getSingerDetail(singerId) {
 
 	return jsonp(url, data, options)
 }
+
+//获取歌曲播放时需要一个key
+export function getvkey() {
+	const url = 'http://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg'
+
+	const data = Object.assign({}, commonParams, {
+		json: 3,
+		guid: 9039554880,
+		g_tk: 938407465,
+		loginUin: 0,
+		hostUin: 0,
+		format: 'jsonp',
+		inCharset: 'utf8',
+		outCharset: 'GB2312',
+		notice: 0,
+		platform: 'yqq',
+		needNewCode: 0
+	})
+
+	return jsonp(url, data, {
+		param: 'jsonCallback'
+	})
+}

@@ -4,6 +4,7 @@ import {
 	options
 } from './config'
 import axios from 'axios'
+//首页图片
 export function getRecommend() {
 	const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
 
@@ -15,7 +16,7 @@ export function getRecommend() {
 
 	return jsonp(url, data, options)
 }
-//代理本地调用
+//代理本地调用   热门歌单推荐
 export function getDiscList() {
 	const url = '/api/getDiscList'
 
