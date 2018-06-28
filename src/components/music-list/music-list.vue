@@ -79,6 +79,7 @@ methods: {
         this.$router.back()
       },
   selectItem(item,index){
+    //设置歌曲播放列表以及要播放的歌曲
    this.selectPlay({
     list:this.songs,
     index:index

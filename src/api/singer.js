@@ -3,6 +3,7 @@ import {
 	commonParams,
 	options
 } from './config'
+// var guid;
 export function getSingerList() {
 	const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
 
@@ -38,24 +39,30 @@ export function getSingerDetail(singerId) {
 }
 
 //获取歌曲播放时需要一个key
-export function getvkey() {
-	const url = 'http://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg'
+// export function getvkey() {
+// 	const url = 'http://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg'
 
-	const data = Object.assign({}, commonParams, {
-		json: 3,
-		guid: 9039554880,
-		g_tk: 938407465,
-		loginUin: 0,
-		hostUin: 0,
-		format: 'jsonp',
-		inCharset: 'utf8',
-		outCharset: 'GB2312',
-		notice: 0,
-		platform: 'yqq',
-		needNewCode: 0
-	})
+// 	const data = Object.assign({}, commonParams, {
+// 		json: 3,
+// 		guid: guid ? guid : guid(),
+// 		g_tk: 938407465,
+// 		loginUin: 0,
+// 		hostUin: 0,
+// 		format: 'jsonp',
+// 		inCharset: 'utf8',
+// 		outCharset: 'GB2312',
+// 		notice: 0,
+// 		platform: 'yqq',
+// 		needNewCode: 0
+// 	})
 
-	return jsonp(url, data, {
-		param: 'jsonCallback'
-	})
-}
+// 	return jsonp(url, data, {
+// 		param: 'jsonCallback'
+// 	})
+// }
+
+// function guid() {
+// 	var t = (new Date).getUTCMilliseconds()
+// 	guid = Math.round(2147483647 * Math.random()) * t % 1e10
+// 	return guid
+// }

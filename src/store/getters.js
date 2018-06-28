@@ -12,6 +12,7 @@ export const mode = state => state.mode
 
 export const currentIndex = state => state.currentIndex
 
+//通过用户点击歌曲列表的index 获取这首歌的详情
 export const currentSong = (state) => {
 	return state.playlist[state.currentIndex] || {}
 }

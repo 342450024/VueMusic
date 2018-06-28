@@ -27,6 +27,7 @@
       }
     },
     methods: {
+      //弹出事件  父组件接受
       selectItem(item, index) {
         this.$emit('select', item, index)
       },
