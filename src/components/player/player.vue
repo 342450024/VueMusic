@@ -34,8 +34,8 @@
             <span class="time time-r">{{format(currentSong.duration)}}</span>
           </div>
          	<div class="operators">
-            <div class="icon i-left">
-              <i class="icon-sequence"></i>
+            <div class="icon i-left" @click='changeMode'>
+              <i :class="iconMode"></i>
             </div>
             <div class="icon i-left" :class='disableCls'>
               <i @click='prev' class="icon-prev"></i>
@@ -63,7 +63,7 @@
           	<p class="desc" v-html='currentSong.singer'></p>
           </div>
           <div class="control">
-          <i :class='miniIcon' @click.stop='togglePlaying'></i>
+            <progressCircle :radius='radius' :percent='percent'><i :class='miniIcon' @click.stop='togglePlaying' class="icon-mini"></i></progressCircle>
           </div>
           <div class="control">
           	<i class="icon-playlist"></i>
@@ -80,16 +80,21 @@ import {mapGetters,mapMutations} from 'vuex'
 import animations from 'create-keyframe-animation'
 import {prefixStyle} from 'common/js/dom'
 import progressBar from 'base/progress-bar/progress-bar'
+import progressCircle from 'base/progress-circle/progress-circle'
+import {playMode} from 'common/js/config'
+import {shuffle} from 'common/js/util'
 const transform = prefixStyle('transform')
  export default{
   data(){
     return{
      songReady:false,
-     currentTime:0
+     currentTime:0,
+     radius:32
     }
   },
   components:{
-    progressBar
+    progressBar,
+    progressCircle
   },
  	computed:{
     //获取是否全屏   歌曲列表  点击的歌曲
@@ -98,7 +103,9 @@ const transform = prefixStyle('transform')
           'playlist',
           'currentSong',
           'playing',
-          'currentIndex'
+          'currentIndex',
+          'sequenceList',
+          'mode'
  			]),
     palyIcon(){
       return this.playing?'icon-pause':'icon-play'
@@ -115,6 +122,10 @@ const transform = prefixStyle('transform')
     //歌曲进度比例
     percent(){
      return this.currentTime / this.currentSong.duration
+    },
+    //切换播放顺序
+    iconMode(){
+      return this.mode === playMode.sequence?'icon-sequence':this.mode === playMode.loop?'icon-loop':'icon-random'
     }
  	},
   mounted(){
@@ -222,6 +233,28 @@ const transform = prefixStyle('transform')
      const second = this._pad(interval % 60)
      return `${minute}:${second}`
      },
+     //切换音乐播放列表顺序
+     changeMode(){
+     const mode = (this.mode + 1) % 3
+     this.setPlayMode(mode)
+     let list = null
+     if(mode === playMode.random){
+      list = shuffle(this.sequenceList)
+     }else{
+      list = this.sequenceList
+     }
+     this.resetCurrentIndex(list)
+     this.setPlaylist(list)
+
+
+
+     },
+     resetCurrentIndex(list){
+      let index = list.findIndex((item)=>{
+           return item.id === this.currentSong.id
+      })
+      this.setCurrentIndex(index)
+     },
      onProgressBarChange(percent){
       //根据进度条长度  变化  歌曲进度
       this.$refs.audio.currentTime = this.currentSong.duration * percent
@@ -258,10 +291,15 @@ const transform = prefixStyle('transform')
       setFullScreen:'SET_FULL_SCREEN',
       setPlayingState:'SET_PLAYING_STATE',
       setCurrentIndex:'SET_CURRENT_INDEX',
+      setPlayMode:'SET_PLAY_MODE',
+      setPlaylist:'SET_PLAYLIST',
      })
  	},
   watch:{
-    currentSong(){
+    currentSong(newSong,oldSong){
+      if(newSong.id === oldSong.id){
+          return
+      }
       this.$nextTick(()=>{
         //监听歌曲变化时播放
       this.$refs.audio.play()
