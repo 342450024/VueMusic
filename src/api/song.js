@@ -1,17 +1,18 @@
-import {commonParams} from './config'
+import {
+	commonParams
+} from './config'
 import axios from 'axios'
 
-//代理本地调用   歌词
 export function getLyric(mid) {
 	const url = '/api/lyric'
 
 	const data = Object.assign({}, commonParams, {
-		songmid:mid,
+		songmid: mid,
 		platform: 'yqq',
-		pcachetime: +new Date(),
-		hostUin:0,
+		hostUin: 0,
 		needNewCode: 0,
-		g_tk: 67232076,
+		categoryId: 10000000,
+		pcachetime: +new Date(),
 		format: 'json'
 	})
 

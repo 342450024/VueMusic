@@ -6,7 +6,7 @@
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style='bgStyle' ref="bgImage">
       <div class="play-wrapper">
-        <div ref="playBtn" v-show="songs.length>0" class="play" @click='random'>
+        <div ref="playBtn" v-show="songs.length>0" class="play" @click="random">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -16,7 +16,7 @@
     <div class="bg-layer" ref="layer"></div>
     <Scroll :data='songs' @scroll='scroll' class='list' ref='list' :probe-type="probeType" :listenScroll="listenScroll">
     	<div class="song-list-wrapper">
-    		<SongList @select='selectItem' :songs='songs'></SongList>
+    		<SongList @select='selectItem' :songs='songs' :rank='rank'></SongList>
     	</div>
     <div v-show="!songs.length" class="loading-container">
         <Loading></Loading>
@@ -30,13 +30,14 @@
  import Loading from 'base/loading/loading'
  import {prefixStyle} from 'common/js/dom'
  import {mapActions} from 'vuex'
-
+ import {playlistMixin} from 'common/js/mixin'
  const RESERVED_HEIGHT = 40
  const transform = prefixStyle('transform')
  const backdrop = prefixStyle('backdrop-filter')
 
 
  export default{
+  mixins:[playlistMixin],
  	props: {
   songs: {
     type: Array,
@@ -49,6 +50,10 @@
   title: {
     type: String,
     default: ''
+  },
+  rank:{
+    type:Boolean,
+    default:false
   }
 },
 data(){
@@ -72,6 +77,11 @@ computed: {
   }
 },
 methods: {
+  handlePlaylist(playlist){
+   const bottom = playlist.length > 0 ? '60px' : ''
+   this.$refs.list.$el.style.bottom = bottom
+   this.$refs.list.refresh()
+  },
   scroll(pos){
     this.scrollY=pos.y
   },
@@ -85,11 +95,11 @@ methods: {
     index:index
    })
   },
-  random(){
-    this.randomPlay({
-    list:this.songs,
-   })
-  },
+  random() {
+        this.randomPlay({
+          list: this.songs
+        })
+      },
   //代理actons中的方法
   ...mapActions([
     "selectPlay",
