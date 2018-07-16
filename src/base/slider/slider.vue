@@ -92,25 +92,20 @@
           scrollX: true,
           scrollY: false,
           momentum: false,
-          snap: true,
-          snapLoop: this.loop,
-          snapThreshold: 0.3,
-          snapSpeed: 400
+          snap: {
+        loop: this.loop, // 循环
+        threshold: 0.1
+         }
         })
 
         this.slider.on('scrollEnd', () => {
           //滑到下一页时给指示器换class，因为为了无缝连接多创建了2个dom所以需要pageIndex -= 1
           let pageIndex = this.slider.getCurrentPage().pageX
-          if (this.loop) {
-            pageIndex -= 1
-          }
           this.currentPageIndex = pageIndex
-
           if (this.autoPlay) {
             this._play()
           }
         })
-
         this.slider.on('beforeScrollStart', () => {
           if (this.autoPlay) {
             clearTimeout(this.timer)
@@ -119,16 +114,11 @@
       },
       _initDots() {
         this.dots = new Array(this.children.length)
+
       },
       _play() {
-        //因为index从0开始所以加1
-        let pageIndex = this.currentPageIndex + 1
-        //因为为了无缝连接多创建了2个dom所以加1
-        if (this.loop) {
-          pageIndex += 1
-        }
         this.timer = setTimeout(() => {
-          this.slider.goToPage(pageIndex, 0, 400)
+          this.slider.next()
         }, this.interval)
       }
     }
